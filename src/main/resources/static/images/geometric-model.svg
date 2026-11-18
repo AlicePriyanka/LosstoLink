@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 175" fill="none" role="img" aria-labelledby="geomTitle geomDesc">
+  <title id="geomTitle">Geometric Distribution Conceptual Diagram</title>
+  <desc id="geomDesc">Conceptual schematic showing sequential transmission attempts ending in the first successful transmission on attempt k alongside a qualitative Geometric decay bar profile.</desc>
+
+  <rect width="440" height="175" rx="12" fill="#070B15"/>
+  <rect x="0.5" y="0.5" width="439" height="174" rx="11.5" stroke="#1E293B"/>
+
+  <!-- Left zone: Sequential attempts -->
+  <text x="18" y="24" fill="#A78BFA" font-family="ui-monospace, SFMono-Regular, monospace" font-size="9.5" letter-spacing="0.8">ATTEMPT SEQUENCE 1 .. k</text>
+  <rect x="18" y="34" width="212" height="58" rx="8" fill="#0B1222" stroke="#1E293B"/>
+
+  <!-- Connecting links -->
+  <line x1="48" y1="60" x2="196" y2="60" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+  <!-- Attempt 1: Drop -->
+  <circle cx="44" cy="60" r="11" fill="#1E1B4B" stroke="#64748B" stroke-width="1.3"/>
+  <path d="M 40 56 L 48 64 M 48 56 L 40 64" stroke="#94A3B8" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="41" y="83" fill="#64748B" font-family="ui-monospace, SFMono-Regular, monospace" font-size="8.5">1</text>
+
+  <!-- Attempt 2: Drop -->
+  <circle cx="88" cy="60" r="11" fill="#1E1B4B" stroke="#64748B" stroke-width="1.3"/>
+  <path d="M 84 56 L 92 64 M 92 56 L 84 64" stroke="#94A3B8" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="85" y="83" fill="#64748B" font-family="ui-monospace, SFMono-Regular, monospace" font-size="8.5">2</text>
+
+  <!-- Ellipsis -->
+  <circle cx="128" cy="60" r="2" fill="#64748B"/>
+  <circle cx="137" cy="60" r="2" fill="#64748B"/>
+  <circle cx="146" cy="60" r="2" fill="#64748B"/>
+
+  <!-- Attempt k: First Success -->
+  <circle cx="192" cy="60" r="14" fill="#8B5CF6" fill-opacity="0.2" stroke="#A78BFA" stroke-width="1.8"/>
+  <path d="M 186 60 L 190 64.5 L 199 55" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="189" y="83" fill="#A78BFA" font-family="ui-monospace, SFMono-Regular, monospace" font-size="8.5">k</text>
+
+  <!-- Bottom left legend -->
+  <rect x="18" y="104" width="212" height="53" rx="8" fill="#0B1222" stroke="#1E293B"/>
+  <circle cx="32" cy="122" r="3.5" fill="#A78BFA"/>
+  <text x="43" y="125" fill="#E2E8F0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5" font-weight="500">First Successful Transmission</text>
+  <text x="30" y="144" fill="#94A3B8" font-family="ui-monospace, SFMono-Regular, monospace" font-size="9.5">k − 1 failures, success on trial k</text>
+
+  <!-- Right zone: Conceptual PMF decay shape -->
+  <text x="252" y="24" fill="#94A3B8" font-family="ui-monospace, SFMono-Regular, monospace" font-size="9.5" letter-spacing="0.8">PMF PROFILE P(Y = k)</text>
+  <rect x="252" y="34" width="170" height="123" rx="8" fill="#0B1222" stroke="#1E293B"/>
+
+  <!-- Axes -->
+  <line x1="274" y1="48" x2="274" y2="134" stroke="#475569" stroke-width="1.2"/>
+  <line x1="274" y1="134" x2="406" y2="134" stroke="#475569" stroke-width="1.2"/>
+
+  <!-- Subtle horizontal guide lines -->
+  <line x1="274" y1="74" x2="406" y2="74" stroke="#1E293B" stroke-width="1" stroke-dasharray="2 3"/>
+  <line x1="274" y1="104" x2="406" y2="104" stroke="#1E293B" stroke-width="1" stroke-dasharray="2 3"/>
+
+  <!-- Qualitative discrete Geometric decay bars -->
+  <rect x="284" y="60" width="14" height="74" rx="2" fill="#A78BFA"/>
+  <rect x="304" y="82" width="14" height="52" rx="2" fill="#8B5CF6" opacity="0.88"/>
+  <rect x="324" y="99" width="14" height="35" rx="2" fill="#7C3AED" opacity="0.78"/>
+  <rect x="344" y="112" width="14" height="22" rx="2" fill="#6D28D9" opacity="0.65"/>
+  <rect x="364" y="121" width="14" height="13" rx="2" fill="#5B21B6" opacity="0.52"/>
+  <rect x="384" y="127" width="14" height="7" rx="1.5" fill="#4C1D95" opacity="0.4"/>
+
+  <text x="288" y="147" fill="#A78BFA" font-family="ui-monospace, SFMono-Regular, monospace" font-size="8.5">1</text>
+  <text x="308" y="147" fill="#64748B" font-family="ui-monospace, SFMono-Regular, monospace" font-size="8.5">2</text>
+  <text x="328" y="147" fill="#64748B" font-family="ui-monospace, SFMono-Regular, monospace" font-size="8.5">3</text>
+  <text x="386" y="147" fill="#64748B" font-family="ui-monospace, SFMono-Regular, monospace" font-size="8.5">...</text>
+</svg>
+

@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 460" fill="none" role="img" aria-labelledby="heroDiagramTitle heroDiagramDesc">
+  <title id="heroDiagramTitle">Deep-Space Communication Link Architecture</title>
+  <desc id="heroDiagramDesc">Schematic showing Earth ground station antenna transmitting across deep space to an orbital spacecraft relay probe, with signal propagation waves and conceptual link stages.</desc>
+
+  <defs>
+    <radialGradient id="earthGlow" cx="20%" cy="88%" r="46%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.38"/>
+      <stop offset="65%" stop-color="#0EA5E9" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#060913" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="probeGlow" cx="79%" cy="24%" r="28%">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#060913" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="earthSurface" x1="20" y1="315" x2="250" y2="455" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F2A56"/>
+      <stop offset="55%" stop-color="#091834"/>
+      <stop offset="100%" stop-color="#050B18"/>
+    </linearGradient>
+    <linearGradient id="signalBeam" x1="175" y1="322" x2="486" y2="122" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.75"/>
+      <stop offset="50%" stop-color="#60A5FA" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#A78BFA" stop-opacity="0.8"/>
+    </linearGradient>
+    <pattern id="techGrid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#94A3B8" stroke-width="0.6" stroke-opacity="0.09"/>
+    </pattern>
+  </defs>
+
+  <!-- Instrument background -->
+  <rect width="640" height="460" rx="16" fill="#070B15"/>
+  <rect width="640" height="460" rx="16" fill="url(#techGrid)"/>
+  <rect width="640" height="460" rx="16" fill="url(#earthGlow)"/>
+  <rect width="640" height="460" rx="16" fill="url(#probeGlow)"/>
+  <rect x="0.75" y="0.75" width="638.5" height="458.5" rx="15.25" stroke="#1E293B" stroke-width="1.5"/>
+
+  <!-- Subtle star field -->
+  <circle cx="95" cy="64" r="1.3" fill="#CBD5E1" opacity="0.55"/>
+  <circle cx="188" cy="44" r="1" fill="#94A3B8" opacity="0.4"/>
+  <circle cx="268" cy="96" r="1.4" fill="#38BDF8" opacity="0.55"/>
+  <circle cx="348" cy="52" r="1" fill="#E2E8F0" opacity="0.45"/>
+  <circle cx="422" cy="72" r="1.2" fill="#A78BFA" opacity="0.5"/>
+  <circle cx="578" cy="84" r="1.5" fill="#CBD5E1" opacity="0.5"/>
+  <circle cx="586" cy="212" r="1.1" fill="#94A3B8" opacity="0.4"/>
+  <circle cx="515" cy="368" r="1.3" fill="#38BDF8" opacity="0.4"/>
+  <circle cx="395" cy="396" r="1" fill="#CBD5E1" opacity="0.35"/>
+  <circle cx="72" cy="186" r="1.2" fill="#94A3B8" opacity="0.4"/>
+  <circle cx="142" cy="144" r="1" fill="#A78BFA" opacity="0.4"/>
+
+  <!-- Top telemetry header strip -->
+  <line x1="20" y1="36" x2="620" y2="36" stroke="#1E293B" stroke-width="1"/>
+  <circle cx="32" cy="21" r="3.5" fill="#38BDF8"/>
+  <text x="44" y="25" fill="#94A3B8" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="10.5" letter-spacing="1.4">TELEMETRY LINK SCHEMATIC // EARTH-SPACECRAFT CHANNEL</text>
+  <text x="524" y="25" fill="#64748B" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="10" letter-spacing="1">DUAL-MODEL</text>
+
+  <!-- Orbital reference arcs -->
+  <path d="M 40 310 C 165 180, 345 100, 595 85" stroke="#334155" stroke-width="1" stroke-dasharray="4 5" opacity="0.65"/>
+  <path d="M 110 430 C 235 305, 420 225, 610 198" stroke="#1E293B" stroke-width="1" stroke-dasharray="3 6" opacity="0.8"/>
+
+  <!-- Earth curvature on bottom-left -->
+  <path d="M 0 330 Q 155 292 268 460 L 0 460 Z" fill="url(#earthSurface)"/>
+  <!-- Atmospheric rim -->
+  <path d="M 0 330 Q 155 292 268 460" stroke="#38BDF8" stroke-width="2" opacity="0.7"/>
+  <path d="M 0 322 Q 160 284 277 460" stroke="#38BDF8" stroke-width="1" opacity="0.22"/>
+  <!-- Latitude/longitude grid arcs on Earth -->
+  <path d="M 18 378 Q 112 346 196 458" stroke="#1D4ED8" stroke-width="1" opacity="0.4"/>
+  <path d="M 0 422 Q 82 396 142 460" stroke="#1D4ED8" stroke-width="1" opacity="0.35"/>
+  <path d="M 88 320 Q 108 386 92 460" stroke="#1E40AF" stroke-width="1" opacity="0.35"/>
+
+  <!-- Earth Deep Space Network Ground Station Dish -->
+  <g transform="translate(132, 305)">
+    <!-- Concrete pedestal -->
+    <path d="M -12 30 L 12 30 L 16 42 L -16 42 Z" fill="#1E293B" stroke="#475569" stroke-width="1.2"/>
+    <line x1="-22" y1="42" x2="22" y2="42" stroke="#38BDF8" stroke-width="1.5" opacity="0.5"/>
+    <!-- Support yoke -->
+    <path d="M -6 30 L 0 16 L 6 30" stroke="#94A3B8" stroke-width="1.6" fill="none"/>
+    <!-- Tilted parabolic reflector pointing toward probe -->
+    <g transform="rotate(-33)">
+      <path d="M -20 -4 Q 0 18 20 -4" fill="#0F172A" stroke="#38BDF8" stroke-width="2" stroke-linecap="round"/>
+      <line x1="-14" y1="-1" x2="0" y2="-17" stroke="#94A3B8" stroke-width="1.2"/>
+      <line x1="14" y1="-1" x2="0" y2="-17" stroke="#94A3B8" stroke-width="1.2"/>
+      <circle cx="0" cy="-18" r="2.6" fill="#38BDF8"/>
+    </g>
+  </g>
+
+  <!-- Earth station label -->
+  <g transform="translate(30, 386)">
+    <rect width="142" height="44" rx="8" fill="#0B1222" fill-opacity="0.9" stroke="#1E293B" stroke-width="1"/>
+    <circle cx="14" cy="15" r="3" fill="#38BDF8"/>
+    <text x="24" y="18" fill="#E2E8F0" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">Earth DSN Terminal</text>
+    <text x="14" y="34" fill="#94A3B8" font-family="ui-monospace, SFMono-Regular, monospace" font-size="9.5">TX / RX Ground Array</text>
+  </g>
+
+  <!-- Signal propagation beam corridor -->
+  <polygon points="154,284 484,116 502,138 168,298" fill="url(#signalBeam)" opacity="0.14"/>
+  <line x1="160" y1="291" x2="493" y2="127" stroke="url(#signalBeam)" stroke-width="1.75" stroke-dasharray="6 4"/>
+
+  <!-- Concentric signal pulses along trajectory -->
+  <g transform="translate(226, 258) rotate(-26)">
+    <path d="M 0 -14 A 18 18 0 0 1 0 14" stroke="#38BDF8" stroke-width="1.6" stroke-linecap="round" opacity="0.75"/>
+    <path d="M 8 -20 A 25 25 0 0 1 8 20" stroke="#38BDF8" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
+  </g>
+
+  <!-- Mid-link signal attenuation / drop zone indicator -->
+  <g transform="translate(324, 210)">
+    <circle cx="0" cy="0" r="22" fill="#0F172A" fill-opacity="0.88" stroke="#475569" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <circle cx="0" cy="0" r="10" fill="#8B5CF6" fill-opacity="0.18" stroke="#A78BFA" stroke-width="1.3"/>
+    <!-- Signal packet wave -->
+    <path d="M -14 0 L -7 0 L -4 -7 L 1 7 L 5 -4 L 8 0 L 14 0" stroke="#38BDF8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Mid-link annotation card -->
+  <g transform="translate(256, 248)">
+    <rect width="176" height="52" rx="8" fill="#0B1222" fill-opacity="0.92" stroke="#334155" stroke-width="1"/>
+    <text x="12" y="19" fill="#38BDF8" font-family="ui-monospace, SFMono-Regular, monospace" font-size="9.5" letter-spacing="0.8">CHANNEL UNCERTAINTY</text>
+    <text x="12" y="34" fill="#CBD5E1" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5">Packet drops &amp; retry windows</text>
+    <text x="12" y="45" fill="#94A3B8" font-family="ui-monospace, SFMono-Regular, monospace" font-size="9">Poisson + Geometric Models</text>
+  </g>
+
+  <!-- Upper-right signal reception pulses -->
+  <g transform="translate(442, 152) rotate(154)">
+    <path d="M 0 -13 A 16 16 0 0 1 0 13" stroke="#A78BFA" stroke-width="1.6" stroke-linecap="round" opacity="0.75"/>
+    <path d="M 7 -19 A 24 24 0 0 1 7 19" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>
+  </g>
+
+  <!-- Spacecraft / Deep-Space Probe (upper right) -->
+  <g transform="translate(520, 114) rotate(-25)">
+    <!-- Left solar panel wing -->
+    <rect x="-74" y="-12" width="44" height="24" rx="2" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5"/>
+    <line x1="-60" y1="-12" x2="-60" y2="12" stroke="#1E3A8A" stroke-width="1"/>
+    <line x1="-45" y1="-12" x2="-45" y2="12" stroke="#1E3A8A" stroke-width="1"/>
+    <line x1="-74" y1="0" x2="-30" y2="0" stroke="#1E3A8A" stroke-width="1"/>
+    <line x1="-30" y1="0" x2="-18" y2="0" stroke="#94A3B8" stroke-width="2"/>
+
+    <!-- Right solar panel wing -->
+    <rect x="30" y="-12" width="44" height="24" rx="2" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5"/>
+    <line x1="45" y1="-12" x2="45" y2="12" stroke="#1E3A8A" stroke-width="1"/>
+    <line x1="60" y1="-12" x2="60" y2="12" stroke="#1E3A8A" stroke-width="1"/>
+    <line x1="30" y1="0" x2="74" y2="0" stroke="#1E3A8A" stroke-width="1"/>
+    <line x1="18" y1="0" x2="30" y2="0" stroke="#94A3B8" stroke-width="2"/>
+
+    <!-- Probe central octagonal bus -->
+    <polygon points="-16,-14 16,-14 20,0 16,14 -16,14 -20,0" fill="#1E293B" stroke="#CBD5E1" stroke-width="1.5"/>
+    <rect x="-9" y="-7" width="18" height="14" rx="2" fill="#0B1120" stroke="#8B5CF6" stroke-width="1.2"/>
+    <circle cx="0" cy="0" r="3" fill="#A78BFA"/>
+
+    <!-- High-gain dish pointing toward Earth (left-downward in rotated frame) -->
+    <path d="M -22 14 Q 0 32 22 14" fill="#0F172A" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"/>
+    <line x1="0" y1="14" x2="0" y2="30" stroke="#CBD5E1" stroke-width="1.2"/>
+    <circle cx="0" cy="31" r="2.2" fill="#38BDF8"/>
+
+    <!-- Top telemetry mast -->
+    <line x1="0" y1="-14" x2="0" y2="-28" stroke="#94A3B8" stroke-width="1.4"/>
+    <circle cx="0" cy="-30" r="2.5" fill="#38BDF8"/>
+  </g>
+
+  <!-- Spacecraft label -->
+  <g transform="translate(454, 174)">
+    <rect width="160" height="44" rx="8" fill="#0B1222" fill-opacity="0.92" stroke="#1E293B" stroke-width="1"/>
+    <circle cx="14" cy="15" r="3" fill="#A78BFA"/>
+    <text x="24" y="18" fill="#E2E8F0" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">Deep-Space Spacecraft</text>
+    <text x="14" y="34" fill="#94A3B8" font-family="ui-monospace, SFMono-Regular, monospace" font-size="9.5">High-Gain Dish Telemetry</text>
+  </g>
+
+  <!-- Bottom right dual-model badge strip -->
+  <g transform="translate(362, 374)">
+    <rect width="256" height="62" rx="10" fill="#0B1222" fill-opacity="0.94" stroke="#1E293B" stroke-width="1"/>
+    <text x="14" y="20" fill="#94A3B8" font-family="ui-monospace, SFMono-Regular, monospace" font-size="9.5" letter-spacing="0.9">ACTIVE SCOPE (2 MODELS ONLY)</text>
+    <rect x="14" y="30" width="108" height="22" rx="5" fill="#0F172A" stroke="#38BDF8" stroke-opacity="0.45"/>
+    <circle cx="24" cy="41" r="2.8" fill="#38BDF8"/>
+    <text x="33" y="45" fill="#E2E8F0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5" font-weight="500">Poisson Drops</text>
+    <rect x="132" y="30" width="110" height="22" rx="5" fill="#0F172A" stroke="#8B5CF6" stroke-opacity="0.5"/>
+    <circle cx="142" cy="41" r="2.8" fill="#A78BFA"/>
+    <text x="151" y="45" fill="#E2E8F0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5" font-weight="500">Geometric Sync</text>
+  </g>
+</svg>
+

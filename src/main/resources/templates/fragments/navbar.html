@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="navbar(activePage)">
+<header class="site-header">
+    <div class="container header-inner">
+        <a th:href="@{/}" class="brand" aria-label="DeepSpace Analytics Home">
+            <img th:src="@{/images/favicon.svg}" alt="" class="brand-icon" width="34" height="34">
+            <span class="brand-text">
+                <span class="brand-name">DeepSpace Analytics</span>
+                <span class="brand-sub">Reliability Modelling</span>
+            </span>
+        </a>
+
+        <button type="button"
+                class="nav-toggle"
+                aria-label="Toggle navigation menu"
+                aria-expanded="false"
+                aria-controls="primary-navigation">
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+        </button>
+
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+            <ul class="nav-list">
+                <li>
+                    <a th:href="@{/}"
+                       class="nav-link"
+                       th:classappend="${activePage == 'home'} ? ' is-active' : ''"
+                       th:attr="aria-current=${activePage == 'home'} ? 'page' : null">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <button type="button"
+                            id="about-dialog-trigger"
+                            class="nav-link nav-btn-about"
+                            aria-haspopup="dialog"
+                            aria-controls="about-dialog-backdrop"
+                            aria-expanded="false">
+                        About Project
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Animated About Project Dialog Modal -->
+<div id="about-dialog-backdrop"
+     class="about-dialog-backdrop"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="about-dialog-title"
+     aria-describedby="about-dialog-summary"
+     hidden>
+    <div id="about-dialog-card" class="about-dialog-card" tabindex="-1">
+        <div class="about-dialog-header">
+            <div class="about-dialog-title-group">
+                <span class="about-dialog-badge">Project Scope &amp; Methodology</span>
+                <h2 id="about-dialog-title" class="about-dialog-title">DeepSpace Analytics</h2>
+                <p id="about-dialog-summary" class="about-dialog-subtitle">
+                    Deep-Space Communication Modelling Using Poisson &amp; Geometric Distributions
+                </p>
+            </div>
+            <button type="button"
+                    id="about-dialog-close-btn"
+                    class="about-dialog-close-btn"
+                    aria-label="Close About dialog">
+                <svg class="about-close-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="about-dialog-body">
+            <!-- 1. Overview & Motivation -->
+            <section class="about-dialog-section">
+                <h3 class="about-section-heading">1. Project Overview &amp; Research Motivation</h3>
+                <p class="about-dialog-text">
+                    Signals travelling between deep-space probes and Earth ground stations traverse vast interplanetary distances plagued by solar interference, cosmic noise, signal attenuation, and atmospheric disruption. Because packet drops and delayed link lock are inherently uncertain, discrete probability models provide a rigorous mathematical framework for quantifying communication reliability.
+                </p>
+            </section>
+
+            <!-- 2. Dual-Model Framework -->
+            <section class="about-dialog-section">
+                <h3 class="about-section-heading">2. Dual-Model Statistical Framework</h3>
+                <p class="about-dialog-text">
+                    Deep-space communication engineering requires answering two distinct statistical questions for every telemetry contact session:
+                </p>
+                <div class="about-cards-grid">
+                    <div class="about-method-card about-method-card--poisson">
+                        <div class="about-card-badge">Module 1 · Poisson Distribution</div>
+                        <h4 class="about-card-title">Quantifying Transmission Drops</h4>
+                        <p class="about-card-desc">
+                            By treating packet drops as discrete random events across a fixed observation window, the Poisson distribution models expected disruption density &lambda; and reveals the likelihood of zero-drop versus high-loss communication intervals.
+                        </p>
+                        <div class="about-card-math">
+                            <code>P(X = k) = (&lambda;<sup>k</sup> e<sup>&minus;&lambda;</sup>) / k!</code>
+                        </div>
+                    </div>
+
+                    <div class="about-method-card about-method-card--geometric">
+                        <div class="about-card-badge">Module 2 · Geometric Distribution</div>
+                        <h4 class="about-card-title">First Successful Transmission</h4>
+                        <p class="about-card-desc">
+                            When a spacecraft initiates repeated transmission attempts under noisy channel conditions, the Geometric distribution captures the waiting time in discrete trials until the first successful acknowledgement reaches Earth. Attempt 1 carries the highest single-attempt probability.
+                        </p>
+                        <div class="about-card-math">
+                            <code>P(Y = k) = (1 &minus; p)<sup>k &minus; 1</sup> p</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Communication Reliability -->
+            <section class="about-dialog-section">
+                <h3 class="about-section-heading">3. Communication Reliability Analysis</h3>
+                <p class="about-dialog-text">
+                    Cumulative link reliability evaluates the overall probability of establishing successful communication within a finite horizon of <em>n</em> attempts:
+                </p>
+                <div class="about-callout-box">
+                    <div class="about-callout-formula">
+                        <code>R(n) = P(Y &le; n) = 1 &minus; (1 &minus; p)<sup>n</sup></code>
+                    </div>
+                    <p class="about-callout-text">
+                        The tail exceedance risk <code>P(Y &gt; n) = (1 &minus; p)<sup>n</sup></code> quantifies the residual risk that link acquisition requires more than <em>n</em> attempts. Milestone analysis evaluates the attempt horizons required to achieve 90%, 95%, and 99% target reliability thresholds.
+                    </p>
+                </div>
+            </section>
+
+            <!-- 4. Defined Scope & Assumptions -->
+            <section class="about-dialog-section">
+                <h3 class="about-section-heading">4. Defined Scope &amp; Theoretical Assumptions</h3>
+                <ul class="about-assumptions-list">
+                    <li>
+                        <strong>Stationary Poisson Rate (&lambda;):</strong> Drops occur at a constant average rate over the evaluated communication window, assuming independent arrival increments.
+                    </li>
+                    <li>
+                        <strong>Independent Bernoulli Trials (p):</strong> Each transmission attempt has a constant single-attempt success probability <em>p</em> with no channel memory across retries.
+                    </li>
+                    <li>
+                        <strong>Strict Dual-Model Boundary:</strong> This analytical system intentionally uses only the Poisson distribution and the Geometric distribution, preserving mathematical clarity and direct alignment with academic research objectives.
+                    </li>
+                </ul>
+            </section>
+        </div>
+
+        <div class="about-dialog-footer">
+            <button type="button" id="about-dialog-dismiss-btn" class="btn btn-secondary">
+                Close
+            </button>
+            <a th:href="@{/analysis}" class="btn btn-primary">
+                <span>Open Communication Analysis</span>
+                <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M4.5 10H15.5M15.5 10L11 5.5M15.5 10L11 14.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</div>
+</th:block>
+</body>
+</html>
+

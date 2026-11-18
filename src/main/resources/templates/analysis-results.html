@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results Dashboard | DeepSpace Analytics</title>
+    <meta name="description" content="Results Dashboard presenting Poisson transmission drop analysis, Geometric first successful transmission probabilities, and Communication Reliability.">
+    <link rel="icon" type="image/svg+xml" th:href="@{/images/favicon.svg}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="app-shell">
+
+<div th:replace="~{fragments/navbar :: navbar(${activePage})}"></div>
+
+<main id="main-content" class="dashboard-main">
+    <section class="dashboard-page-section">
+        <div class="container dashboard-stack">
+
+            <!-- Compact Results Header -->
+            <header class="dashboard-header dashboard-header--compact">
+                <div class="dashboard-header-row">
+                    <div class="dashboard-header-title-group">
+                        <span class="status-dot status-dot--green" aria-hidden="true"></span>
+                        <h1 class="dashboard-title">Results Dashboard</h1>
+                        <span class="scope-pill scope-pill--header"
+                              th:text="${dashboard.analysisType != null ? dashboard.analysisType.displayName : 'Combined Analysis'}">
+                            Combined Analysis
+                        </span>
+                    </div>
+                    <p class="dashboard-subtitle">
+                        Statistical drop frequency and link acquisition results for submitted deep-space parameters.
+                    </p>
+                </div>
+            </header>
+
+            <!-- SECTION 1: SUBMITTED PARAMETERS (Compact Inline Bar) -->
+            <section id="analysis-summary"
+                     class="dashboard-params-bar"
+                     aria-labelledby="section1-heading">
+                <div class="params-bar-label">
+                    <span class="section-kicker">Section 1 · Submitted Parameters</span>
+                    <h2 id="section1-heading" class="sr-only">Analysis Parameters Summary</h2>
+                </div>
+
+                <div class="summary-params-grid summary-params-grid--compact">
+                    <div class="param-chip param-chip--poisson param-chip--inline" th:if="${dashboard.poissonAvailable}">
+                        <span class="param-name">Rate (&lambda;):</span>
+                        <strong class="param-val" th:text="${dashboard.submittedLambda}">3</strong>
+                    </div>
+
+                    <div class="param-chip param-chip--poisson param-chip--inline" th:if="${dashboard.poissonAvailable}">
+                        <span class="param-name">Drops (k):</span>
+                        <strong class="param-val" th:text="${dashboard.submittedDropCount}">2</strong>
+                    </div>
+
+                    <div class="param-chip param-chip--geometric param-chip--inline" th:if="${dashboard.geometricAvailable}">
+                        <span class="param-name">Success (p):</span>
+                        <strong class="param-val" th:text="${dashboard.submittedSuccessProbability}">0.6</strong>
+                    </div>
+
+                    <div class="param-chip param-chip--geometric param-chip--inline" th:if="${dashboard.geometricAvailable}">
+                        <span class="param-name">Attempts (n):</span>
+                        <strong class="param-val" th:text="${dashboard.submittedMaxAttempts}">5</strong>
+                    </div>
+                </div>
+
+                <div class="params-bar-badge" title="Validated calculation parameters">
+                    <svg class="summary-icon-inline" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M6.8 10.2L9 12.4L13.4 7.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Validated</span>
+                </div>
+            </section>
+
+            <!-- Distributions Grid: Side-by-side in Combined mode; single column otherwise -->
+            <div th:class="${dashboard.isCombined()} ? 'dashboard-combined-grid dashboard-combined-grid--two-col' : 'dashboard-combined-grid'">
+
+                <!-- SECTION 2: MODULE 1 · POISSON DISTRIBUTION RESULTS -->
+                <section id="poisson-results"
+                         class="dashboard-section dashboard-section--poisson"
+                         aria-labelledby="section2-heading"
+                         th:if="${dashboard.poissonAvailable}">
+                    <div class="dashboard-section-head">
+                        <div>
+                            <span class="model-tag model-tag--blue">Section 2 · Module 1: Poisson Distribution</span>
+                            <h2 id="section2-heading" class="dashboard-section-title">Transmission Drop Analysis</h2>
+                        </div>
+                        <span class="model-symbol"
+                              th:text="|X ~ Poisson(λ = ${dashboard.poisson.lambdaDisplay})|">
+                            X ~ Poisson(&lambda; = 3)
+                        </span>
+                    </div>
+
+                    <div class="result-cards-grid result-cards-grid--poisson">
+                        <!-- Card 1: Exact-k Probability -->
+                        <article class="result-card result-card--poisson">
+                            <div class="result-card-top">
+                                <h3 class="result-card-title">Exact-k Probability</h3>
+                                <span class="result-notation"
+                                      th:text="|P(X = ${dashboard.poisson.dropCount})|">
+                                    P(X = 2)
+                                </span>
+                            </div>
+                            <div class="result-value-group">
+                                <div class="result-value-item">
+                                    <strong class="result-primary-value" th:text="${dashboard.poisson.exactDropDecimal}">0.2240418</strong>
+                                </div>
+                                <div class="result-value-item">
+                                    <span class="result-percent-badge result-percent-badge--blue"
+                                          th:text="${dashboard.poisson.exactDropPercent}">
+                                        22.4042%
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="result-meaning">
+                                Probability of observing exactly k transmission drops in one interval.
+                            </p>
+                        </article>
+
+                        <!-- Card 2: Expected Drops -->
+                        <article class="result-card result-card--poisson">
+                            <div class="result-card-top">
+                                <h3 class="result-card-title">Expected Drops</h3>
+                                <span class="result-notation">E(X) = &lambda;</span>
+                            </div>
+                            <div class="result-value-group">
+                                <strong class="result-primary-value" th:text="${dashboard.poisson.expectedDropsValue}">3</strong>
+                                <span class="result-unit-badge">drops / interval</span>
+                            </div>
+                            <p class="result-meaning">
+                                Mean number of drops expected per communication window.
+                            </p>
+                        </article>
+
+                        <!-- Card 3: Probability of Zero Drops -->
+                        <article class="result-card result-card--poisson">
+                            <div class="result-card-top">
+                                <h3 class="result-card-title">Zero Drops</h3>
+                                <span class="result-notation">P(X = 0) = e^(&minus;&lambda;)</span>
+                            </div>
+                            <div class="result-value-group">
+                                <div class="result-value-item">
+                                    <strong class="result-primary-value" th:text="${dashboard.poisson.probabilityZeroDecimal}">0.0497871</strong>
+                                </div>
+                                <div class="result-value-item">
+                                    <span class="result-percent-badge result-percent-badge--blue"
+                                          th:text="${dashboard.poisson.probabilityZeroPercent}">
+                                        4.9787%
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="result-meaning">
+                                Likelihood of an uninterrupted, clean transmission interval.
+                            </p>
+                        </article>
+
+                        <!-- Card 4: Probability of At Least One Drop -->
+                        <article class="result-card result-card--poisson">
+                            <div class="result-card-top">
+                                <h3 class="result-card-title">At Least One Drop</h3>
+                                <span class="result-notation">P(X &ge; 1) = 1 &minus; e^(&minus;&lambda;)</span>
+                            </div>
+                            <div class="result-value-group">
+                                <div class="result-value-item">
+                                    <strong class="result-primary-value" th:text="${dashboard.poisson.probabilityAtLeastOneDecimal}">0.9502129</strong>
+                                </div>
+                                <div class="result-value-item">
+                                    <span class="result-percent-badge result-percent-badge--blue"
+                                          th:text="${dashboard.poisson.probabilityAtLeastOnePercent}">
+                                        95.0213%
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="result-meaning">
+                                Likelihood that one or more drops interrupt the communication interval.
+                            </p>
+                        </article>
+
+                        <!-- Card 5: Variance of Transmission Drops -->
+                        <article class="result-card result-card--poisson">
+                            <div class="result-card-top">
+                                <h3 class="result-card-title">Variance</h3>
+                                <span class="result-notation">Var(X) = &lambda;</span>
+                            </div>
+                            <div class="result-value-group">
+                                <strong class="result-primary-value" th:text="${dashboard.poisson.varianceValue}">3</strong>
+                                <span class="result-unit-badge">drops&sup2;</span>
+                            </div>
+                            <p class="result-meaning">
+                                Statistical dispersion equal to the mean &lambda; for Poisson model.
+                            </p>
+                        </article>
+                    </div>
+
+                    <!-- Integrated Graph 1: Poisson Distribution Bar Chart -->
+                    <div class="module-chart-wrapper">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Transmission Drop Distribution</h3>
+                            <span class="chart-highlight-pill chart-highlight-pill--blue"
+                                  th:text="|Selected k = ${dashboard.poisson.dropCount} · P(X = ${dashboard.poisson.dropCount}) = ${dashboard.poisson.exactDropPercent}|">
+                                Selected k = 2 · P(X = 2) = 22.4042%
+                            </span>
+                        </div>
+                        <div class="chart-stage chart-stage--compact">
+                            <div class="chart-canvas-wrapper chart-canvas-wrapper--compact">
+                                <canvas id="poisson-chart"
+                                        role="img"
+                                        th:attr="aria-label=|Bar chart showing Poisson transmission drop probability distribution for lambda equals ${dashboard.poisson.lambdaDisplay} with selected k equals ${dashboard.poisson.dropCount} highlighted.|">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: MODULE 2 · GEOMETRIC DISTRIBUTION RESULTS -->
+                <section id="geometric-results"
+                         class="dashboard-section dashboard-section--geometric"
+                         aria-labelledby="section3-heading"
+                         th:if="${dashboard.geometricAvailable}">
+                    <div class="dashboard-section-head">
+                        <div>
+                            <span class="model-tag model-tag--green">Section 3 · Module 2: Geometric Distribution</span>
+                            <h2 id="section3-heading" class="dashboard-section-title">First Successful Transmission Analysis</h2>
+                        </div>
+                        <span class="model-symbol"
+                              th:text="|Y ~ Geometric(p = ${dashboard.geometric.successProbabilityDisplay}, n = ${dashboard.geometric.maxAttempts})|">
+                            Y ~ Geometric(p = 0.6, n = 5)
+                        </span>
+                    </div>
+
+                    <div class="result-cards-grid result-cards-grid--two">
+                        <!-- Card 1: Expected Attempts -->
+                        <article class="result-card result-card--geometric">
+                            <div class="result-card-top">
+                                <h3 class="result-card-title">Expected Attempts</h3>
+                                <span class="result-notation">E(Y) = 1 / p</span>
+                            </div>
+                            <div class="result-value-group">
+                                <div class="result-value-item">
+                                    <strong class="result-primary-value" th:text="${dashboard.geometric.expectedAttemptsValue}">1.6666667</strong>
+                                </div>
+                                <div class="result-value-item">
+                                    <span class="result-percent-badge result-percent-badge--purple"
+                                          th:text="${dashboard.geometric.expectedAttemptsRoundedText}">
+                                        Approx. 2 attempts
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="result-meaning">
+                                Average transmission attempts required until first successful reception.
+                            </p>
+                            <p class="result-subnote">
+                                Note: Rounded count is a statistical average over repeated runs, not a fixed attempt limit.
+                            </p>
+                        </article>
+
+                        <!-- Card 2: Most Likely First Successful Attempt -->
+                        <article class="result-card result-card--geometric">
+                            <div class="result-card-top">
+                                <h3 class="result-card-title">Most Likely Attempt</h3>
+                                <span class="result-notation">Mode = 1</span>
+                            </div>
+                            <div class="result-value-group">
+                                <div class="result-value-item">
+                                    <strong class="result-primary-value"
+                                            th:text="|Attempt ${dashboard.geometric.mostLikelyAttempt}|">
+                                        Attempt 1
+                                    </strong>
+                                </div>
+                                <div class="result-value-item">
+                                    <span class="result-percent-badge result-percent-badge--purple"
+                                          th:text="${dashboard.geometric.firstAttemptPercent}">
+                                        60.0000%
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="result-meaning">
+                                Attempt 1 always carries the highest single-attempt probability.
+                            </p>
+                        </article>
+                    </div>
+
+                    <!-- Dynamic Per-Attempt Probability Table -->
+                    <div class="probability-table-panel">
+                        <div class="table-panel-header">
+                            <h3 class="table-panel-title">Attempt-by-Attempt Probability Table</h3>
+                            <span class="table-row-count"
+                                  th:text="|${#lists.size(dashboard.attemptRows)} ${#lists.size(dashboard.attemptRows) == 1 ? 'Row' : 'Rows'}|">
+                                5 Rows
+                            </span>
+                        </div>
+
+                        <div class="table-scroll-container table-scroll-container--compact">
+                            <table class="probability-table" aria-label="Geometric probability distribution across attempts 1 through n">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Attempt (k)</th>
+                                    <th scope="col">P(Y = k)</th>
+                                    <th scope="col">Percentage (%)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="row : ${dashboard.attemptRows}">
+                                    <td data-label="Attempt (k)">
+                                        <span class="attempt-pill" th:text="|Attempt ${row.attempt}|">Attempt 1</span>
+                                    </td>
+                                    <td class="mono-cell" data-label="P(Y = k)" th:text="${row.probabilityDecimal}">
+                                        0.6000000
+                                    </td>
+                                    <td class="mono-cell mono-cell--accent" data-label="Percentage (%)" th:text="${row.probabilityPercent}">
+                                        60.0000%
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th scope="row"
+                                        th:text="|Cumulative (k = 1 .. ${dashboard.geometric.maxAttempts})|">
+                                        Cumulative (k = 1 .. 5)
+                                    </th>
+                                    <td class="mono-cell" th:text="${dashboard.geometric.withinAttemptsDecimal}">
+                                        0.9897600
+                                    </td>
+                                    <td class="mono-cell mono-cell--accent" th:text="${dashboard.geometric.withinAttemptsPercent}">
+                                        98.9760%
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Integrated Graph 2: Geometric First Successful Transmission Probability Bar Chart -->
+                    <div class="module-chart-wrapper">
+                        <div class="chart-header">
+                            <h3 class="chart-title">First Success Probability</h3>
+                            <span class="chart-highlight-pill chart-highlight-pill--green"
+                                  th:text="|Mode: Attempt ${dashboard.geometric.mostLikelyAttempt} (${dashboard.geometric.firstAttemptPercent})|">
+                                Mode: Attempt 1 (60.0000%)
+                            </span>
+                        </div>
+                        <div class="chart-stage chart-stage--compact">
+                            <div class="chart-canvas-wrapper chart-canvas-wrapper--compact">
+                                <canvas id="geometric-chart"
+                                        role="img"
+                                        th:attr="aria-label=|Bar chart showing Geometric first successful transmission probability across attempts 1 through ${dashboard.geometric.maxAttempts} with Attempt 1 highlighted.|">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div> <!-- close dashboard-combined-grid -->
+
+            <!-- SECTION 4: MODULE 3 · COMMUNICATION RELIABILITY (Placed separately BELOW) -->
+            <section id="overall-reliability"
+                     class="dashboard-section dashboard-section--reliability"
+                     aria-labelledby="section4-heading"
+                     th:if="${dashboard.reliabilityAvailable}">
+                <div class="dashboard-section-head">
+                    <div>
+                        <span class="section-kicker">Section 4 · Module 3: Communication Reliability</span>
+                        <h2 id="section4-heading" class="dashboard-section-title">Overall Communication Reliability</h2>
+                    </div>
+                    <span class="reliability-status-badge" th:text="${dashboard.reliability.statusBadge}">
+                        High Link Acquisition Reliability
+                    </span>
+                </div>
+
+                <div class="reliability-metrics-grid reliability-metrics-grid--two">
+                    <!-- 1. Probability of first success within n attempts -->
+                    <div class="reliability-metric-box reliability-metric-box--highlight">
+                        <span class="reliability-metric-tag"
+                              th:text="|R(${dashboard.reliability.maxAttempts}) = 1 − (1 − p)^${dashboard.reliability.maxAttempts}|">
+                            R(5) = 1 − (1 − p)^5
+                        </span>
+                        <span class="reliability-metric-label">Reliability within n Attempts</span>
+                        <div class="reliability-value-row">
+                            <strong class="reliability-metric-value" th:text="${dashboard.reliability.reliabilityDecimal}">0.9897600</strong>
+                            <span class="result-percent-badge result-percent-badge--emerald"
+                                  th:text="${dashboard.reliability.reliabilityPercent}">
+                                98.9760%
+                            </span>
+                        </div>
+                        <span class="reliability-metric-sub">Cumulative link acquisition probability R(n) within permitted attempts</span>
+                    </div>
+
+                    <!-- 2. Probability of requiring more than n attempts -->
+                    <div class="reliability-metric-box reliability-metric-box--purple">
+                        <span class="reliability-metric-tag"
+                              th:text="|P(Y > ${dashboard.reliability.maxAttempts}) = (1 − p)^${dashboard.reliability.maxAttempts}|">
+                            P(Y > 5) = (1 − p)^5
+                        </span>
+                        <span class="reliability-metric-label">Requiring More Than n Attempts</span>
+                        <div class="reliability-value-row">
+                            <strong class="reliability-metric-value" th:text="${dashboard.reliability.moreThanAttemptsDecimal}">0.0102400</strong>
+                            <span class="result-percent-badge result-percent-badge--purple"
+                                  th:text="${dashboard.reliability.moreThanAttemptsPercent}">
+                                1.0240%
+                            </span>
+                        </div>
+                        <span class="reliability-metric-sub">Tail risk of exceeding permitted transmission attempts</span>
+                    </div>
+                </div>
+
+                <!-- Target Reliability Milestones Card -->
+                <div class="target-milestones-card" th:if="${dashboard.reliability.targetAttempts90 > 0}">
+                    <div class="milestones-card-header">
+                        <h3 class="milestones-title">Required Attempts for Target Reliability Levels</h3>
+                        <span class="milestones-subtitle">R(m) = 1 &minus; (1 &minus; p)^m</span>
+                    </div>
+                    <div class="milestones-grid">
+                        <div class="milestone-chip">
+                            <span class="milestone-target-badge">90% Target</span>
+                            <strong class="milestone-attempts"
+                                    th:text="|${dashboard.reliability.targetAttempts90} ${dashboard.reliability.targetAttempts90 == 1 ? 'Attempt' : 'Attempts'}|">
+                                3 Attempts
+                            </strong>
+                            <span class="milestone-actual"
+                                  th:text="|Achieves ${dashboard.reliability.targetReliability90Percent} reliability|">
+                                Achieves 93.6000% reliability
+                            </span>
+                        </div>
+                        <div class="milestone-chip">
+                            <span class="milestone-target-badge">95% Target</span>
+                            <strong class="milestone-attempts"
+                                    th:text="|${dashboard.reliability.targetAttempts95} ${dashboard.reliability.targetAttempts95 == 1 ? 'Attempt' : 'Attempts'}|">
+                                4 Attempts
+                            </strong>
+                            <span class="milestone-actual"
+                                  th:text="|Achieves ${dashboard.reliability.targetReliability95Percent} reliability|">
+                                Achieves 97.4400% reliability
+                            </span>
+                        </div>
+                        <div class="milestone-chip">
+                            <span class="milestone-target-badge">99% Target</span>
+                            <strong class="milestone-attempts"
+                                    th:text="|${dashboard.reliability.targetAttempts99} ${dashboard.reliability.targetAttempts99 == 1 ? 'Attempt' : 'Attempts'}|">
+                                6 Attempts
+                            </strong>
+                            <span class="milestone-actual"
+                                  th:text="|Achieves ${dashboard.reliability.targetReliability99Percent} reliability|">
+                                Achieves 99.5904% reliability
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrated Graph 3: Cumulative Communication Reliability Curve -->
+                <div class="module-chart-wrapper">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Probability of Successful Transmission Within Attempts</h3>
+                        <span class="chart-highlight-pill chart-highlight-pill--purple"
+                              th:text="|Selected n = ${dashboard.geometric.maxAttempts} · R(${dashboard.geometric.maxAttempts}) = ${dashboard.geometric.withinAttemptsPercent}|">
+                            Selected n = 5 · R(5) = 98.9760%
+                        </span>
+                    </div>
+                    <div class="chart-stage chart-stage--compact">
+                        <div class="chart-canvas-wrapper chart-canvas-wrapper--compact">
+                            <canvas id="reliability-chart"
+                                    role="img"
+                                    th:attr="aria-label=|Line chart showing cumulative communication reliability R(n) = 1 - (1 - p)^n across transmission attempts with selected maximum attempt n equals ${dashboard.geometric.maxAttempts} highlighted.|">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="automatic-reliability-card">
+                    <span class="automatic-reliability-label">Reliability Summary</span>
+                    <p class="reliability-summary-text" th:text="${dashboard.reliability.overallInterpretation}">
+                        Summary interpretation.
+                    </p>
+                </div>
+
+                <div class="math-clarification-box" role="note" aria-label="Mathematical clarification">
+                    <svg class="clarification-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M12 8V12.5M12 16H12.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                    <p th:text="${dashboard.reliability.mathematicalClarification}">
+                        Clarification statement.
+                    </p>
+                </div>
+            </section>
+
+            <!-- FINAL PRACTICAL RESULT & OPERATIONAL INTERPRETATION -->
+            <section id="result-interpretation"
+                     class="dashboard-section dashboard-section--interpretation"
+                     aria-labelledby="section-practical-heading"
+                     th:if="${dashboard.practicalConclusion != null}">
+                <div class="dashboard-section-head">
+                    <div>
+                        <span class="section-kicker">Final Practical Result</span>
+                        <h2 id="section-practical-heading" class="dashboard-section-title"
+                            th:text="${dashboard.practicalConclusion.headline}">
+                            Practical Analysis Conclusion
+                        </h2>
+                    </div>
+                    <span class="scope-pill"
+                          th:text="|Mode: ${dashboard.analysisType != null ? dashboard.analysisType.displayName : 'Combined'}|">
+                        Mode: Combined
+                    </span>
+                </div>
+
+                <p class="dashboard-section-lead" th:text="${dashboard.practicalConclusion.narrative}">
+                    Plain-language explanation dynamically derived from your actual calculation results.
+                </p>
+
+                <div class="math-clarification-box" role="note" aria-label="Operational interpretation guidance">
+                    <svg class="clarification-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M12 8V12.5M12 16H12.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                    <p th:text="${dashboard.practicalConclusion.technicalNote}">
+                        Important distinction between evaluated parameters and guaranteed outcomes.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECTION 5: ACTION BUTTONS -->
+            <section id="dashboard-actions"
+                     class="dashboard-section dashboard-actions-panel"
+                     aria-labelledby="section-actions-heading">
+                <div class="actions-panel-inner">
+                    <div>
+                        <span class="section-kicker">Next Actions</span>
+                        <h2 id="section-actions-heading" class="actions-panel-title">Continue Exploring Link Reliability</h2>
+                        <p class="actions-panel-copy">
+                            Run a new analysis with fresh parameters, return to the project homepage, or download a complete academic PDF analysis report.
+                        </p>
+                    </div>
+
+                    <div class="dashboard-action-buttons">
+                        <a th:href="@{/analysis}" id="new-analysis-btn" class="btn btn-primary btn-lg">
+                            <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                <path d="M4 10a6 6 0 0 1 10.24-4.24L16 7.5M16 3.5v4h-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 10a6 6 0 0 1-10.24 4.24L4 12.5M4 16.5v-4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>New Analysis</span>
+                        </a>
+
+                        <a th:href="@{/}" id="back-to-home-btn" class="btn btn-secondary btn-lg">
+                            <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                <path d="M3.5 9.5L10 4L16.5 9.5V16A1 1 0 0 1 15.5 17H4.5A1 1 0 0 1 3.5 16V9.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                <path d="M8 17V11.5H12V17" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Back to Home</span>
+                        </a>
+
+                        <button type="button"
+                                id="download-report-btn"
+                                class="btn btn-report btn-lg"
+                                th:attr="data-endpoint=@{/analysis/report/pdf},
+                                         data-analysis-type=${dashboard.analysisType != null ? dashboard.analysisType.name() : 'COMBINED'},
+                                         data-lambda=${dashboard.submittedLambda != null ? dashboard.submittedLambda : ''},
+                                         data-drop-count=${dashboard.submittedDropCount != null ? dashboard.submittedDropCount : ''},
+                                         data-success-probability=${dashboard.submittedSuccessProbability != null ? dashboard.submittedSuccessProbability : ''},
+                                         data-max-attempts=${dashboard.submittedMaxAttempts != null ? dashboard.submittedMaxAttempts : ''}">
+                            <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                <path d="M10 3.5V12.5M10 12.5L6.5 9M10 12.5L13.5 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M4 14.5V15.5A1 1 0 0 0 5 16.5H15A1 1 0 0 0 16 15.5V14.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="download-btn-label">Download PDF Report</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="report-download-status"
+                     class="validation-confirmed-banner report-download-banner"
+                     role="status"
+                     aria-live="polite"
+                     hidden>
+                    <span class="status-dot status-dot--green" aria-hidden="true"></span>
+                    <span id="report-download-status-text"></span>
+                </div>
+
+                <div id="report-download-error"
+                     class="form-validation-summary report-download-banner"
+                     role="alert"
+                     aria-live="polite"
+                     hidden>
+                    <svg class="summary-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M10 6.5V10.5M10 13.5H10.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                    <span id="report-download-error-text"></span>
+                </div>
+            </section>
+
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script id="dashboard-chart-data" type="application/json" th:utext="${dashboardChartsJson}"></script>
+<script th:src="@{/js/vendor/chart.umd.min.js}" defer></script>
+<script th:src="@{/js/main.js}" defer></script>
+</body>
+</html>

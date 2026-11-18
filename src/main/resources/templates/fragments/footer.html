@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="footer">
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-brand-col">
+            <a th:href="@{/}" class="brand footer-brand">
+                <img th:src="@{/images/favicon.svg}" alt="" class="brand-icon" width="28" height="28">
+                <span class="brand-name">DeepSpace Analytics</span>
+            </a>
+            <p class="footer-project-title">
+                Deep-Space Communication Using Poisson and Geometric Models for Counting Transmission Drops and Identifying the First Successful Transmission.
+            </p>
+        </div>
+
+        <div class="footer-meta-col">
+            <p class="footer-label">Academic Project Scope</p>
+            <p class="footer-description">
+                College Mathematics Project exploring spacecraft-to-Earth link reliability exclusively through two discrete probability distributions: the Poisson distribution for drop counts over fixed intervals and the Geometric distribution for first-success transmission attempts.
+            </p>
+            <div class="footer-bottom-meta">
+                <span class="meta-pill">Spring Boot · Thymeleaf</span>
+                <span class="meta-pill">Poisson &amp; Geometric Probability Engine</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Floating Back-to-Top Button -->
+<button type="button"
+        id="back-to-top-btn"
+        class="back-to-top-btn"
+        aria-label="Back to top"
+        title="Back to top"
+        hidden>
+    <svg class="back-to-top-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true" width="20" height="20">
+        <path d="M10 15V5M10 5L5 10M10 5L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</button>
+</th:block>
+</body>
+</html>

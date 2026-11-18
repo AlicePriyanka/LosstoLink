@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communication Analysis | DeepSpace Analytics</title>
+    <meta name="description" content="Unified input screen for entering Poisson and Geometric deep-space communication parameters.">
+    <link rel="icon" type="image/svg+xml" th:href="@{/images/favicon.svg}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="app-shell">
+
+<div th:replace="~{fragments/navbar :: navbar(${activePage})}"></div>
+
+<main id="main-content">
+    <section class="analysis-page-section">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="analysis-header">
+                <div class="eyebrow-badge">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span>Dual-Model Parameter Input &amp; Validation</span>
+                </div>
+                <h1 class="analysis-title">Communication Analysis</h1>
+                <p class="analysis-subtitle">
+                    Enter communication parameters to analyse transmission drops and first successful transmission.
+                </p>
+            </div>
+
+            <!-- Single Unified Form for Both Distributions -->
+            <form id="communication-analysis-form"
+                  class="analysis-form"
+                  th:action="@{/analysis/submit}"
+                  th:object="${analysisInput}"
+                  th:attr="data-has-server-errors=${hasServerErrors != null and hasServerErrors}"
+                  method="post"
+                  novalidate>
+
+                <input type="hidden" id="analysisType" name="analysisType" th:field="*{analysisType}">
+
+                <div class="analysis-sections-grid">
+                    <!-- Section A: Poisson Distribution -->
+                    <section class="input-section-card input-section-card--poisson" aria-labelledby="section-a-heading">
+                        <div class="card-top-bar">
+                            <span class="model-tag model-tag--blue">Poisson Distribution</span>
+                            <span class="model-symbol">X ~ Poisson(&lambda;)</span>
+                        </div>
+
+                        <h2 id="section-a-heading" class="input-section-title">
+                            Section A &ndash; Transmission Drop Analysis (Poisson Distribution)
+                        </h2>
+
+                        <div class="form-fields">
+                            <div class="form-field"
+                                 th:classappend="${#fields.hasErrors('lambda')} ? ' has-error' : ''">
+                                <label for="lambda" class="field-label">
+                                    Average Transmission Drop Rate (&lambda;)
+                                </label>
+                                <p id="lambda-desc" class="field-description">
+                                    Average number of transmission drops during a defined communication interval.
+                                </p>
+                                <input type="text"
+                                       inputmode="decimal"
+                                       autocomplete="off"
+                                       id="lambda"
+                                       th:field="*{lambda}"
+                                       class="field-input"
+                                       th:classappend="${#fields.hasErrors('lambda')} ? ' is-invalid' : ''"
+                                       aria-describedby="lambda-desc lambda-error"
+                                       th:attr="aria-invalid=${#fields.hasErrors('lambda')} ? 'true' : 'false'">
+                                <p id="lambda-error"
+                                   class="field-error"
+                                   data-error-for="lambda"
+                                   role="alert"
+                                   th:hidden="${!#fields.hasErrors('lambda')}"
+                                   th:text="${#fields.hasErrors('lambda')} ? ${#fields.errors('lambda')[0]} : ''"></p>
+                            </div>
+
+                            <div class="form-field"
+                                 th:classappend="${#fields.hasErrors('dropCount')} ? ' has-error' : ''">
+                                <label for="dropCount" class="field-label">
+                                    Number of Transmission Drops (k)
+                                </label>
+                                <p id="dropCount-desc" class="field-description">
+                                    Number of drops for which the probability needs to be calculated.
+                                </p>
+                                <input type="text"
+                                       inputmode="numeric"
+                                       autocomplete="off"
+                                       id="dropCount"
+                                       th:field="*{dropCount}"
+                                       class="field-input"
+                                       th:classappend="${#fields.hasErrors('dropCount')} ? ' is-invalid' : ''"
+                                       aria-describedby="dropCount-desc dropCount-error"
+                                       th:attr="aria-invalid=${#fields.hasErrors('dropCount')} ? 'true' : 'false'">
+                                <p id="dropCount-error"
+                                   class="field-error"
+                                   data-error-for="dropCount"
+                                   role="alert"
+                                   th:hidden="${!#fields.hasErrors('dropCount')}"
+                                   th:text="${#fields.hasErrors('dropCount')} ? ${#fields.errors('dropCount')[0]} : ''"></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section B: Geometric Distribution -->
+                    <section class="input-section-card input-section-card--geometric" aria-labelledby="section-b-heading">
+                        <div class="card-top-bar">
+                            <span class="model-tag model-tag--purple">Geometric Distribution</span>
+                            <span class="model-symbol">Y ~ Geometric(p)</span>
+                        </div>
+
+                        <h2 id="section-b-heading" class="input-section-title">
+                            Section B &ndash; First Successful Transmission (Geometric Distribution)
+                        </h2>
+
+                        <div class="form-fields">
+                            <div class="form-field"
+                                 th:classappend="${#fields.hasErrors('successProbability')} ? ' has-error' : ''">
+                                <label for="successProbability" class="field-label">
+                                    Probability of Successful Transmission (p)
+                                </label>
+                                <p id="successProbability-desc" class="field-description">
+                                    Probability of successful communication in a single attempt. Accepts decimal values between 0 and 1.
+                                </p>
+                                <input type="text"
+                                       inputmode="decimal"
+                                       autocomplete="off"
+                                       id="successProbability"
+                                       th:field="*{successProbability}"
+                                       class="field-input"
+                                       th:classappend="${#fields.hasErrors('successProbability')} ? ' is-invalid' : ''"
+                                       aria-describedby="successProbability-desc successProbability-error"
+                                       th:attr="aria-invalid=${#fields.hasErrors('successProbability')} ? 'true' : 'false'">
+                                <p id="successProbability-error"
+                                   class="field-error"
+                                   data-error-for="successProbability"
+                                   role="alert"
+                                   th:hidden="${!#fields.hasErrors('successProbability')}"
+                                   th:text="${#fields.hasErrors('successProbability')} ? ${#fields.errors('successProbability')[0]} : ''"></p>
+                            </div>
+
+                            <div class="form-field"
+                                 th:classappend="${#fields.hasErrors('maxAttempts')} ? ' has-error' : ''">
+                                <label for="maxAttempts" class="field-label">
+                                    Maximum Number of Attempts (n)
+                                </label>
+                                <p id="maxAttempts-desc" class="field-description">
+                                    Number of attempts to consider when analysing the probability of successful communication.
+                                </p>
+                                <input type="text"
+                                       inputmode="numeric"
+                                       autocomplete="off"
+                                       id="maxAttempts"
+                                       th:field="*{maxAttempts}"
+                                       class="field-input"
+                                       th:classappend="${#fields.hasErrors('maxAttempts')} ? ' is-invalid' : ''"
+                                       aria-describedby="maxAttempts-desc maxAttempts-error"
+                                       th:attr="aria-invalid=${#fields.hasErrors('maxAttempts')} ? 'true' : 'false'">
+                                <p id="maxAttempts-error"
+                                   class="field-error"
+                                   data-error-for="maxAttempts"
+                                   role="alert"
+                                   th:hidden="${!#fields.hasErrors('maxAttempts')}"
+                                   th:text="${#fields.hasErrors('maxAttempts')} ? ${#fields.errors('maxAttempts')[0]} : ''"></p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- General Validation Summary Message -->
+                <div id="form-validation-summary"
+                     class="form-validation-summary"
+                     role="alert"
+                     aria-live="polite"
+                     th:hidden="${generalErrorMessage == null}">
+                    <svg class="summary-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M10 6.5V10.5M10 13.5H10.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                    <span id="form-validation-summary-text"
+                          th:text="${generalErrorMessage != null ? generalErrorMessage : ''}"></span>
+                </div>
+
+                <!-- Unified Action Bar -->
+                <div class="form-actions-bar">
+                    <div class="form-actions-note">
+                        Supports Poisson-only (&lambda;, k), Geometric-only (p, n), or Combined analysis using all four parameters.
+                    </div>
+                    <div class="form-actions-buttons">
+                        <button type="button" id="reset-inputs-btn" class="btn btn-secondary btn-lg">
+                            Reset Inputs
+                        </button>
+                        <button type="submit" id="calculate-results-btn" class="btn btn-primary btn-lg">
+                            <span>Calculate Results</span>
+                            <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                <path d="M4.5 10H15.5M15.5 10L11 5.5M15.5 10L11 14.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mode Confirmation Modal Popup (Poisson-only or Geometric-only) -->
+                <div id="mode-confirmation-modal"
+                     class="modal-backdrop"
+                     role="dialog"
+                     aria-modal="true"
+                     aria-labelledby="modal-title"
+                     aria-describedby="modal-description"
+                     hidden>
+                    <div class="modal-dialog">
+                        <div class="modal-header">
+                            <div class="modal-badge-wrapper">
+                                <span id="modal-mode-badge" class="model-tag model-tag--blue">Poisson Distribution Only</span>
+                            </div>
+                            <h2 id="modal-title" class="modal-title">Confirm Single-Model Analysis</h2>
+                        </div>
+                        <div class="modal-body">
+                            <p id="modal-description" class="modal-description">
+                                You have provided parameters for transmission drop analysis (Poisson Distribution) only. Would you like to proceed with only Poisson transmission drop analysis?
+                            </p>
+                            <div id="modal-params-summary" class="modal-params-summary">
+                                <!-- Dynamic parameter summary populated by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="modal-cancel-btn" class="btn btn-secondary btn-lg">
+                                Cancel &amp; Edit Inputs
+                            </button>
+                            <button type="button" id="modal-confirm-btn" class="btn btn-primary btn-lg">
+                                <span>Proceed with Analysis</span>
+                                <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                    <path d="M4.5 10H15.5M15.5 10L11 5.5M15.5 10L11 14.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Short Information Section -->
+            <section class="analysis-info-panel" aria-labelledby="analysis-info-heading">
+                <div class="analysis-info-header">
+                    <span class="section-kicker">Model Integration Overview</span>
+                    <h2 id="analysis-info-heading" class="analysis-info-title">
+                        How These Two Models Work Together
+                    </h2>
+                </div>
+
+                <div class="analysis-info-grid">
+                    <div class="info-point">
+                        <span class="info-badge info-badge--blue">Poisson</span>
+                        <div>
+                            <h3>Transmission Drop Analysis</h3>
+                            <p>Poisson distribution analyses transmission drops occurring across a defined communication interval.</p>
+                        </div>
+                    </div>
+
+                    <div class="info-point">
+                        <span class="info-badge info-badge--purple">Geometric</span>
+                        <div>
+                            <h3>First Successful Transmission</h3>
+                            <p>Geometric distribution analyses the first successful transmission across sequential communication attempts.</p>
+                        </div>
+                    </div>
+
+                    <div class="info-point">
+                        <span class="info-badge info-badge--neutral">Combined</span>
+                        <div>
+                            <h3>Unified Link Reliability</h3>
+                            <p>Both methods are used together to understand communication reliability across deep-space spacecraft-to-Earth links.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/main.js}" defer></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="|${status != null ? status : 'Error'} · DeepSpace Analytics|">Error · DeepSpace Analytics</title>
+    <meta name="description" content="DeepSpace Analytics error handler for unavailable routes or unexpected requests.">
+    <link rel="icon" type="image/svg+xml" th:href="@{/images/favicon.svg}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="app-shell">
+
+<div th:replace="~{fragments/navbar :: navbar('error')}"></div>
+
+<main id="main-content" class="error-page-main">
+    <section class="error-page-section">
+        <div class="container">
+            <div class="error-card">
+                <div class="eyebrow-badge">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span th:text="${status != null} ? |HTTP Status ${status}| : 'Request Error'">HTTP Status</span>
+                </div>
+
+                <h1 class="error-title"
+                    th:text="${status == 404} ? 'Page Not Found' : (${status == 405} ? 'Request Method Not Supported' : (${status == 400} ? 'Invalid Communication Request' : 'Unable to Process Request'))">
+                    Unable to Process Request
+                </h1>
+
+                <p class="error-lead" th:if="${status == 404}">
+                    The requested telemetry page or route could not be found in DeepSpace Analytics. You can return to the homepage or start a fresh Poisson &amp; Geometric communication analysis below.
+                </p>
+                <p class="error-lead" th:unless="${status == 404}">
+                    An unexpected request error occurred while processing your request. Your DeepSpace Analytics mathematical engines remain ready—return to the unified input screen to run a valid calculation.
+                </p>
+
+                <dl class="error-meta-grid" aria-label="Request diagnostic details">
+                    <div class="error-meta-item">
+                        <dt>Status</dt>
+                        <dd th:text="${status != null ? status : 'Error'}">404</dd>
+                    </div>
+                    <div class="error-meta-item" th:if="${error != null and !#strings.isEmpty(error)}">
+                        <dt>Summary</dt>
+                        <dd th:text="${error}">Not Found</dd>
+                    </div>
+                    <div class="error-meta-item" th:if="${path != null and !#strings.isEmpty(path)}">
+                        <dt>Requested Path</dt>
+                        <dd th:text="${path}">/</dd>
+                    </div>
+                </dl>
+
+                <div class="error-actions">
+                    <a th:href="@{/analysis}" class="btn btn-primary btn-lg">
+                        <span>Start Communication Analysis</span>
+                        <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d="M4.5 10H15.5M15.5 10L11 5.5M15.5 10L11 14.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a th:href="@{/}" class="btn btn-secondary btn-lg">
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/main.js}" defer></script>
+</body>
+</html>
+
